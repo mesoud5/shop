@@ -66,10 +66,82 @@ header {
     color: black;
 }
 
-.dropdown:hover .dropdown-content {
+/*.dropdown:hover .dropdown-content {
     display: block;
-}
+}*/
 
 .dropdown:hover .dropbtn {
     background-color: #555;
 }
+
+
+/* Style the navigation menu */
+nav {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    width: calc(20% - 20px); /* One-third of the page width */
+    min-height: 100vh; /* Full height of the viewport */
+    margin-right: 20px; /* Separate from adjacent content */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex; /* Change to flex layout */
+    flex-direction: column; /* Items should be stacked vertically */
+}
+
+nav ul li {
+    margin-bottom: 10px; /* Add spacing between menu items */
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd; /* Add a border bottom to separate items */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Style dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    top: 100%; /* Position dropdown below its parent */
+    margin-top: 10px; /* Add spacing to prevent overlap with navigation above */
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 8px 0;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: white;
+}
+
+/* Show dropdown content on hover 
+.dropdown:hover .dropdown-content {
+    display: block;
+}*/
+
+/* Style nested dropdowns */
+.dropdown-content .dropdown-content {
+    min-width: 100%;
+    left: 100%;
+    top: 0;
+}
+
+
+
+
+
+
+

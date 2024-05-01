@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Dashboard</title>
     <link rel="stylesheet" href="../static/css/admin_dashboard.css"> <!-- Include your CSS file here -->
 </head>
+
 <body>
     <header>
         <div class="header-left">
@@ -27,7 +29,59 @@
             </div>
         </div>
     </header>
+    <main>
+        <div class="sections-container">
+            <aside>
+                <nav class="section1">
+                    <ul>
+                        <li><a href="#">Dashboard</a></li>
+                        <li class="dropdown">
+                            <a href="#">Categories</a>
+                            <div class="dropdown-content">
+                                <a href="#">Manage Categories</a>
+                                <a href="#">Add Categories</a>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#">Products</a>
+                            <div class="dropdown-content">
+                                <a href="#">Manage Products</a>
+                                <a href="#">Add Product</a>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#">Sales</a>
+                            <div class="dropdown-content">
+                                <a href="#">Manage Sales</a>
+                                <a href="#">Add Sale</a>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#">Sales Report</a>
+                            <div class="dropdown-content">
+                                <a href="#">Sales by Dates</a>
+                                <a href="#">Monthly Sales</a>
+                                <a href="#">Daily Sales</a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+            <article>
+               <!--
+                <section class="section2">
+                    <h2>Top Sales</h2>
+                    <div id="topSalesContainer">
+                        Top sales items will be dynamically added here 
+                    </div>
+                </section>
+               -->
+            </article>
+        </div>
+    </main>
     <!-- The rest of your page content will go here -->
     <script src="../static/js/admin_dashboard.js"></script>
+
 </body>
+
 </html>
