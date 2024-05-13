@@ -1,3 +1,5 @@
+<!-- Your HTML template with Monthly Sales Form and Monthly Sales Report -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Dashboard</title>
-    <link rel="stylesheet" href="../static/css/admin_dashboard.css"> <!-- Include your CSS file here -->
+    <link rel="stylesheet" href="../static/css/monthly_sales.css"> <!-- Include your CSS file here -->
 </head>
 
 <body>
@@ -37,8 +39,6 @@
                 <nav class="section1">
                     <ul>
                         <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
-
-
                         <li class="dropdown" id="categoriesDropdown">
                             <a href="#">Categories</a>
                             <div class="dropdown-content">
@@ -72,22 +72,64 @@
                 </nav>
             </aside>
             <article>
-                <!--
-                <section class="section2">
-                    <h2>Top Sales</h2>
-                    <div id="topSalesContainer">
-                        Top sales items will be dynamically added here 
-                    </div>
-                </section>
-               -->
+                <!-- Monthly Sales Form -->
+                <h2>Select Month for Sales Report</h2>
+                <form method="POST" action="{{ url_for('monthly_sales') }}">
+                    <label for="selected_month">Select Month:</label>
+                    <select name="selected_month" id="selected_month">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">april</option>
+                        <option value="05">may</option>
+                        <option value="06">june</option>
+                        <option value="07">july</option>
+                        <option value="08">August</option>
+                        <option value="09">september</option>
+                        <option value="10">october</option>
+                        <option value="11">november</option>
+                        <option value="12">december</option>
+                        <!-- Add options for all 12 months -->
+                    </select>
+                    <button type="submit">Generate Report</button>
+                </form>
+                
+                <!-- Monthly Sales Report (Generated Dynamically) -->
+                {% if sales %}
+                <h2>Monthly Sales Report</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product Name</th>
+                            <th>Buying Price</th>
+                            <th>Selling Price</th>
+                            <th>Quantity Sold</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in sales %}
+                        <tr>
+                            <td>{{ sale.date }}</td>
+                            <td>{{ sale.product.name }}</td>
+                            <td>{{ sale.product.buying_price }}</td>
+                            <td>{{ sale.price }}</td>
+                            <td>{{ sale.quantity }}</td>
+                            <td>{{ sale.total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p>Total Sales Amount: {{ total_sales_amount }}</p>
+                <p>Total Profit: {{ total_profit }}</p>
+                {% endif %}
             </article>
         </div>
     </main>
-    <!-- The rest of your page content will go here -->
-    <script src="../static/js/admin_dashboard.js"></script>
+   
+    <script src="../static/js/monthly_sales.js"></script>
 
 </body>
 
 </html>
-
-

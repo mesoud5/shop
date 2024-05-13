@@ -77,30 +77,7 @@ dashboardLink.addEventListener('click', (event) => {
 
 
 
-// Function to handle click event on manage categories
-function manageCategories() {
-    // Redirect to manage categories page or display/manage categories here
-    console.log("Manage Categories clicked");
-}
 
-// Function to handle click event on add category
-function addCategory() {
-    // Redirect to add category page or display add category form here
-    console.log("Add Category clicked");
-}
 
-// Get the categories dropdown and its links
-const categoriesDropdown = document.getElementById("categoriesDropdown");
-const manageCategoriesLink = document.getElementById("manageCategories");
-const addCategoryLink = document.getElementById("addCategory");
+// sales_report.js
 
-// Add event listeners to dropdown links
-manageCategoriesLink.addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent default behavior of link
-    manageCategories();
-});
-
-addCategoryLink.addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent default behavior of link
-    addCategory();
-});

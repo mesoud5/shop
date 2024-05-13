@@ -1,4 +1,4 @@
-
+/* styles.css */
 
 body {
     font-family: Arial, sans-serif;
@@ -18,11 +18,11 @@ header {
 .logo h1 {
     margin: 0;
     padding: 0;
-    font-size: 44px;
+    font-size: 24px;
 }
 
 .header-middle {
-    font-size: 40px;
+    flex-grow: 1; /* This section will grow to fill available space */
     text-align: center;
 }
 
@@ -31,7 +31,6 @@ header {
     padding: 0;
     font-size: 18px;
 }
-
 
 .dropdown {
     position: relative;
@@ -75,6 +74,35 @@ header {
     background-color: #555;
 }
 
+
+/* Style the navigation menu */
+nav {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    width: calc(20% - 20px); /* One-third of the page width */
+    min-height: 100vh; /* Full height of the viewport */
+    margin-right: 20px; /* Separate from adjacent content */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex; /* Change to flex layout */
+    flex-direction: column; /* Items should be stacked vertically */
+}
+
+nav ul li {
+    margin-bottom: 10px; /* Add spacing between menu items */
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd; /* Add a border bottom to separate items */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
 /* Style dropdown content */
 .dropdown-content {
     display: none;
@@ -110,58 +138,61 @@ header {
     left: 100%;
     top: 0;
 }
-/* Main section styles */
-main {
+
+
+
+
+.sections-container {
     display: flex;
-    justify-content: center; /* Center the content horizontally */
-    margin-top: 20px;
 }
 
-.sale-form {
-    display: flex; /* Arrange form elements horizontally */
-    flex-wrap: wrap; /* Allow wrapping for small screens */
+aside {
+    width: 20%;
+}
+
+article {
+    width: 80%;
+}
+
+#addCategoryForm {
     background-color: #f4f4f4;
     padding: 20px;
     border-radius: 5px;
 }
 
-.form-group {
-    flex: 1; /* Each form group takes up equal space */
-    margin-right: 10px; /* Separate form groups */
+#addCategoryForm h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
 }
 
-.form-group:last-child {
-    margin-right: 0; /* Remove margin for the last form group */
-}
-
-label {
+#categoryForm label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"] {
-    width: 100%;
+#categoryForm input[type="text"] {
+    width: 50%; /* Adjust width to make input smaller */
     padding: 8px;
-    margin-top: 5px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    border-radius: 5px;
 }
 
-button[type="submit"] {
-    margin-top: 20px;
+#categoryForm button[type="submit"] {
+    background-color: #333;
+    color: #fff;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-button[type="submit"]:hover {
-    background-color: #454545;
-
+#categoryForm button[type="submit"]:hover {
+    background-color: #555;
 }
+
+
+

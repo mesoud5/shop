@@ -104,3 +104,8 @@ addCategoryLink.addEventListener('click', (event) => {
     event.preventDefault(); // Prevent default behavior of link
     addCategory();
 });
+
+
+
+
+

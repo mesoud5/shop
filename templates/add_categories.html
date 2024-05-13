@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Dashboard</title>
-    <link rel="stylesheet" href="../static/css/admin_dashboard.css"> <!-- Include your CSS file here -->
+    <title>add categoreis</title>
+    <link rel="stylesheet" href="../static/css/add_categoreis.css"> <!-- Include your CSS file here -->
 </head>
 
 <body>
@@ -24,9 +24,7 @@
             <div class="dropdown">
                 <button class="dropbtn">Account</button>
                 <div class="dropdown-content">
-                    <a href="{{ url_for('admin_dashboard') }}">Admin</a>
-                    <a href="{{ url_for('employee_dashboard') }}">ekram</a>
-                    <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="#">Admin</a> <!-- Placeholder link for now -->
                 </div>
             </div>
         </div>
@@ -72,22 +70,23 @@
                 </nav>
             </aside>
             <article>
-                <!--
-                <section class="section2">
-                    <h2>Top Sales</h2>
-                    <div id="topSalesContainer">
-                        Top sales items will be dynamically added here 
-                    </div>
-                </section>
-               -->
+                <div id="addCategoryForm">
+                    <h2>Add Category</h2>
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.name.label }} {{ form.name(size=32) }}<br>
+                        {{ form.submit() }}
+                    </form>
+                </div>
+
             </article>
         </div>
     </main>
     <!-- The rest of your page content will go here -->
-    <script src="../static/js/admin_dashboard.js"></script>
+    <script src="../static/js/add_categoreis.js">
+
+    </script>
 
 </body>
 
 </html>
-
-

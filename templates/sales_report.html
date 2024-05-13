@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Dashboard</title>
-    <link rel="stylesheet" href="../static/css/admin_dashboard.css"> <!-- Include your CSS file here -->
+    <title>manage_categories</title>
+    <link rel="stylesheet" href="../static/css/sales_report.css"> <!-- Include your CSS file here -->
 </head>
 
 <body>
@@ -24,9 +24,7 @@
             <div class="dropdown">
                 <button class="dropbtn">Account</button>
                 <div class="dropdown-content">
-                    <a href="{{ url_for('admin_dashboard') }}">Admin</a>
-                    <a href="{{ url_for('employee_dashboard') }}">ekram</a>
-                    <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="#">Admin</a> <!-- Placeholder link for now -->
                 </div>
             </div>
         </div>
@@ -72,22 +70,58 @@
                 </nav>
             </aside>
             <article>
-                <!--
-                <section class="section2">
-                    <h2>Top Sales</h2>
-                    <div id="topSalesContainer">
-                        Top sales items will be dynamically added here 
-                    </div>
-                </section>
-               -->
+                <div class="container">
+                    <h1>Sales Report: Sales by Dates</h1> 
+            
+                    <!-- HTML form for selecting date range -->
+                    <form id="salesReportForm" method="POST" action="{{ url_for('sales_report') }}">
+                        <label for="start_date">From:</label>
+                        <input type="date" id="start_date" name="start_date">
+                        <label for="end_date">To:</label>
+                        <input type="date" id="end_date" name="end_date">
+                        <button type="submit">Generate Report</button>
+                    </form>
+            
+                    {% if sales %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Product Name</th>
+                                <th>Buying Price</th>
+                                <th>Selling Price</th>
+                                <th>Quantity Sold</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale_info in sales %}
+                            <tr>
+                                <td>{{ sale_info['sale'].date.strftime('%a, %d %b %Y') }}</td>
+                                <td>{{ sale_info['product_name'] }}</td>
+                                <td>{{ sale_info['buying_price'] }}</td>
+                                <td>{{ sale_info['sale'].price }}</td>
+                                <td>{{ sale_info['sale'].quantity }}</td>
+                                <td>{{ sale_info['sale'].total }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <p>Total Sales Amount: {{ total_sales_amount }}</p>
+                    <p>Total Profit: {{ total_profit }}</p>
+                    {% endif %}
+            
+                </div>
             </article>
+            
+            
+
+
         </div>
     </main>
     <!-- The rest of your page content will go here -->
-    <script src="../static/js/admin_dashboard.js"></script>
+    <script src="../static/js/sales_report.js"></script>
 
 </body>
 
 </html>
-
-

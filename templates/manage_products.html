@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Dashboard</title>
-    <link rel="stylesheet" href="../static/css/admin_dashboard.css"> <!-- Include your CSS file here -->
+    <link rel="stylesheet" href="../static/css/manage_products.css"> <!-- Include your CSS file here -->
 </head>
 
 <body>
@@ -72,22 +72,57 @@
                 </nav>
             </aside>
             <article>
-                <!--
-                <section class="section2">
-                    <h2>Top Sales</h2>
-                    <div id="topSalesContainer">
-                        Top sales items will be dynamically added here 
+                <div class="container">
+                    <h1>Manage Products</h1>
+                    <div id="error-message">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
                     </div>
-                </section>
-               -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Buying Price</th>
+                                <th>Selling Price</th>
+                                <th>Date Added</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.category.name }}</td> <!-- Display category name instead of category ID -->
+                                <td>{{ product.quantity }}</td>
+                                <td>{{ product.buying_price }}</td>
+                                <td>{{ product.selling_price }}</td>
+                                <td>{{ product.date_added }}</td>
+                                <td>
+                                    <a href="{{ url_for('edit_product', product_id=product.id) }}">Edit</a>
+                                    <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST"
+                                        style="display: inline;">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
             </article>
         </div>
     </main>
     <!-- The rest of your page content will go here -->
-    <script src="../static/js/admin_dashboard.js"></script>
+    <script src="../static/js/manage_products.js"></script>
 
 </body>
 
 </html>
-
-

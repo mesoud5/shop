@@ -104,3 +104,22 @@ addCategoryLink.addEventListener('click', (event) => {
     event.preventDefault(); // Prevent default behavior of link
     addCategory();
 });
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to calculate and update the total based on item price and quantity
+    function updateTotal() {
+        const price = parseFloat(document.getElementById('price').value);
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const total = price * quantity;
+        document.getElementById('total').value = total.toFixed(2); // Set the total value in the form
+    }
+
+    // Add event listeners to input fields for price and quantity
+    document.getElementById('price').addEventListener('input', updateTotal);
+    document.getElementById('quantity').addEventListener('input', updateTotal);
+});
+

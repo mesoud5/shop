@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Dashboard</title>
-    <link rel="stylesheet" href="../static/css/admin_dashboard.css"> <!-- Include your CSS file here -->
+    <link rel="stylesheet" href="../static/css/edit_categoreis.css"> <!-- Include your CSS file here -->
 </head>
 
 <body>
@@ -24,9 +24,7 @@
             <div class="dropdown">
                 <button class="dropbtn">Account</button>
                 <div class="dropdown-content">
-                    <a href="{{ url_for('admin_dashboard') }}">Admin</a>
-                    <a href="{{ url_for('employee_dashboard') }}">ekram</a>
-                    <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="#">Admin</a> <!-- Placeholder link for now -->
                 </div>
             </div>
         </div>
@@ -36,14 +34,13 @@
             <aside>
                 <nav class="section1">
                     <ul>
-                        <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
-
+                        <li><a href="/templates/admin_dashboard.html">dashboard</a></li>
 
                         <li class="dropdown" id="categoriesDropdown">
                             <a href="#">Categories</a>
                             <div class="dropdown-content">
-                                <a href="{{ url_for('manage_categories') }}">Manage Categories</a>
-                                <a href="{{ url_for('add_category') }}">Add Categories</a>
+                                <a href="/templates/manage_categories.html">Manage Categories</a>
+                                <a href="/templates/add_categories.html">Add Categories</a>
                             </div>
                         </li>
                         <li class="dropdown">
@@ -72,15 +69,17 @@
                 </nav>
             </aside>
             <article>
-                <!--
-                <section class="section2">
-                    <h2>Top Sales</h2>
-                    <div id="topSalesContainer">
-                        Top sales items will be dynamically added here 
+                <h2>Edit Category</h2>
+                <form action="/edit_category/{{ category.id }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        <label for="name" class="form-control-label">Category Name</label>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ category.name }}">
                     </div>
-                </section>
-               -->
+                    <button type="submit" class="btn btn-primary">Update Category</button>
+                </form>
             </article>
+
         </div>
     </main>
     <!-- The rest of your page content will go here -->
@@ -89,5 +88,3 @@
 </body>
 
 </html>
-
-
