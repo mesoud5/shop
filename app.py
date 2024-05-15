@@ -2,13 +2,15 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from datetime import datetime
+from datetime import date
 from wtforms import StringField, SubmitField
 from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import QuerySelectField
 from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
-from sqlalchemy import func
+from sqlalchemy import func, extract
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -37,15 +39,15 @@ class CategoryForm(FlaskForm):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True, default=None)  # Default to None
     quantity = db.Column(db.Integer, nullable=False)
     buying_price = db.Column(db.Float, nullable=False)
     selling_price = db.Column(db.Float, nullable=False)
     date_added = db.Column(db.Date, nullable=False, default=datetime.utcnow)
 
-
     # Define the relationship with the Category model
     category = db.relationship('Category', backref=db.backref('products', lazy=True))
+
 
 
 class ProductForm(FlaskForm):
@@ -157,10 +159,16 @@ def edit_category(category_id):
 @app.route('/delete_category/<int:category_id>', methods=['POST'])
 def delete_category(category_id):
     category = Category.query.get_or_404(category_id)
+    # Find products associated with the category and update their category_id to None
+    products = Product.query.filter_by(category_id=category_id).all()
+    for product in products:
+        product.category_id = None
+    # Now delete the category
     db.session.delete(category)
     db.session.commit()
     flash('Category deleted successfully!', 'success')
     return redirect(url_for('manage_categories'))
+
 
 
 
@@ -184,7 +192,6 @@ def add_product():
     return render_template('add_products.html', form=form)
 
 
-# Route to edit an existing product
 @app.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id):
     product = Product.query.get_or_404(product_id)
@@ -192,6 +199,8 @@ def edit_product(product_id):
     if form.validate_on_submit():
         product.name = form.name.data
         product.category_id = form.category.data.id  # Assign category ID from QuerySelectField
+        print("Form Category ID:", form.category.data.id)  # Debugging print statement
+        print("Product Category ID Before Update:", product.category_id)  # Debugging print statement
         product.quantity = form.quantity.data
         product.buying_price = form.buying_price.data
         product.selling_price = form.selling_price.data
@@ -358,12 +367,22 @@ def monthly_sales():
         # Convert the selected month into a datetime object
         selected_date = datetime.strptime(selected_month, '%m').date()
         
+        # Print the selected month for debugging
+        print("Selected Month:", selected_month)
+        
         # Query the database for sales records within the selected month
-        sales = Sale.query.filter(db.func.strftime('%m', Sale.date) == selected_date.month).all()
+        sales = Sale.query.filter(extract('month', Sale.date) == selected_date.month).all()
+        
+        # Print the sales data for debugging
+        print("Sales Data:", sales)
         
         # Calculate total sales amount and profit
         total_sales_amount = sum(sale.total for sale in sales)
         total_profit = total_sales_amount - sum(sale.product.buying_price * sale.quantity for sale in sales)
+        
+        # Print total sales amount and profit for debugging
+        print("Total Sales Amount:", total_sales_amount)
+        print("Total Profit:", total_profit)
         
         # Render the template with the sales data
         return render_template('monthly_sales_report.html', 
@@ -372,18 +391,120 @@ def monthly_sales():
                                total_profit=total_profit)
     else:
         return render_template('monthly_sales_report.html')  # Render the form for GET requests
-    
+
+
+
+@app.route('/daily_sales')
+def daily_sales():
+    # Get the current date
+    current_date = date.today()
+
+    # Query the database for sales records on the current day, joining with the Product table
+    sales = db.session.query(Sale, Product).filter(Sale.date == current_date).join(Product).all()
+
+    # Prepare a list of dictionaries containing sale and product data
+    sales_data = []
+    for sale, product in sales:
+        sale_data = {
+            'id': sale.id,
+            'item': sale.item,
+            'price': sale.price,
+            'quantity': sale.quantity,
+            'total': sale.total,
+            'date': sale.date,
+            'product_name': product.name,
+            'buying_price': product.buying_price if product else None
+        }
+        sales_data.append(sale_data)
+
+    # Calculate total sales amount and profit
+    total_sales_amount = sum(sale.total for sale, _ in sales)
+
+    # Calculate total profit, considering None values
+    total_profit = 0
+    for sale, product in sales:
+        if product and product.buying_price:
+            total_profit += sale.total - (product.buying_price * sale.quantity)
+
+    # Render the template with the sales data
+    return render_template('daily_sales_report.html',
+                           sales=sales_data,
+                           total_sales_amount=total_sales_amount,
+                           total_profit=total_profit,
+                           current_date=current_date)
+
 
 @app.route('/employee_dashboard')
 def employee_dashboard():
-    # Render the employee dashboard
-    date = datetime.today().strftime('%Y-%m-%d')  # Get the current date
-    return render_template('employee_dashboard.html')
+    # Instantiate SaleForm
+    form = SaleForm()
+
+    # Get the current date
+    current_date = datetime.today().strftime('%Y-%m-%d')
+    
+    # Render the employee dashboard with the current date in the context
+    return render_template('employee_dashboard.html', current_date=current_date, form=form )
+
+
+@app.route('/employee_add_sale', methods=['GET', 'POST'])
+def employee_add_sale():
+    print("Employee add sale route accessed!")
+    form = SaleForm()
+    if form.validate_on_submit():
+        print("Form submitted successfully!")
+        print("Item:", form.item.data)
+        print("Price:", form.price.data)
+        print("Quantity:", form.quantity.data)
+        print("Date:", form.date.data)
+
+        # Ensure form validation passes
+        if form.validate():
+            print("Form validation passed!")
+        else:
+            print("Form validation failed:", form.errors)
+
+        # Print the entire form data received
+        print("Form data (request.form):", request.form)
+
+        # Convert the date string to a Python date object
+        sale_date_str = form.date.data.strftime('%Y-%m-%d')
+        sale_date = datetime.strptime(sale_date_str, '%Y-%m-%d').date()
+
+        # Create a new sale record
+        sale = Sale(
+            item=form.item.data,
+            price=form.price.data,
+            quantity=form.quantity.data,
+            total=form.price.data * form.quantity.data,
+            date=sale_date  # Assign the Python date object
+        )
+
+        # Find the product by name
+        product = Product.query.filter_by(name=form.item.data).first()
+        if product:
+            # If the product is found, update its quantity
+            sale.product_id = product.id  # Set the product_id of the sale
+            product.quantity -= form.quantity.data
+            db.session.commit()
+        else:
+            # If the product is not found, display an error message
+            flash('Product not found', 'error')
+            return redirect(url_for('employee_add_sale'))
+
+        # Commit the changes to the database
+        db.session.add(sale)  # Add the sale after setting the product_id
+        db.session.commit()
+        flash('Sale added successfully!', 'success')
+        return redirect(url_for('employee_dashboard'))  # Redirect to the employee dashboard
+    return render_template('employee_dashboard.html', form=form)
+
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+
 
 
 if __name__ == '__main__':

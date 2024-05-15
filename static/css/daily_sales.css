@@ -1,0 +1,202 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+}
+
+.header-middle {
+    flex-grow: 1; /* This section will grow to fill available space */
+    text-align: center;
+}
+
+.date {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/*.dropdown:hover .dropdown-content {
+    display: block;
+}*/
+
+.dropdown:hover .dropbtn {
+    background-color: #555;
+}
+
+
+/* Style the navigation menu */
+nav {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    width: calc(20% - 20px); /* One-third of the page width */
+    min-height: 100vh; /* Full height of the viewport */
+    margin-right: 20px; /* Separate from adjacent content */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex; /* Change to flex layout */
+    flex-direction: column; /* Items should be stacked vertically */
+}
+
+nav ul li {
+    margin-bottom: 10px; /* Add spacing between menu items */
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd; /* Add a border bottom to separate items */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Style dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    top: 100%; /* Position dropdown below its parent */
+    margin-top: 10px; /* Add spacing to prevent overlap with navigation above */
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 8px 0;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: white;
+}
+
+/* Show dropdown content on hover 
+.dropdown:hover .dropdown-content {
+    display: block;
+}*/
+
+/* Style nested dropdowns */
+.dropdown-content .dropdown-content {
+    min-width: 100%;
+    left: 100%;
+    top: 0;
+}
+
+
+
+
+.sections-container {
+    display: flex;
+}
+
+aside {
+    width: 20%;
+}
+
+article {
+    width: 80%;
+}
+
+#manageCategoriesList {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#manageCategoriesList h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#categoriesList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#categoriesList li {
+    margin-bottom: 10px;
+}
+
+#categoriesList li span {
+    font-weight: bold;
+}
+
+#categoriesList li span,
+#categoriesList li a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#categoriesList li a {
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+#categoriesList li a:hover {
+    background-color: #555;
+}
+
+
+

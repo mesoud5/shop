@@ -24,8 +24,9 @@
             <div class="dropdown">
                 <button class="dropbtn">Account</button>
                 <div class="dropdown-content">
-                    <a href="#">Admin</a> <!-- Placeholder link for now -->
-                </div>
+                    <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+                    <a href="{{ url_for('employee_dashboard') }}">ekram</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
             </div>
         </div>
     </header>
@@ -62,7 +63,7 @@
                             <div class="dropdown-content">
                                 <a href="{{ url_for('sales_report') }}">Sales by Dates</a>
                                 <a href="{{ url_for('monthly_sales') }}">Monthly Sales</a>
-                                <a href="#">Daily Sales</a>
+                                <a href="{{ url_for('daily_sales') }}">daily sales</a>
                             </div>
                         </li>
                     </ul>
