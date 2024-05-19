@@ -10,6 +10,8 @@ from wtforms_alchemy import QuerySelectField
 from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
 from sqlalchemy import func, extract
+from collections import defaultdict
+
 
 
 app = Flask(__name__)
@@ -506,6 +508,28 @@ def logout():
 
 
 
+# Route for fetching sales data
+@app.route('/fetch_sales_data')
+def fetch_sales_data():
+    sales = Sale.query.all()
+    
+    # Use a defaultdict to aggregate sales by date
+    sales_by_date = defaultdict(float)
+    for sale in sales:
+        # Extract the date without the time component
+        sale_date = sale.date
+
+        # Add the sale amount to the total for that date
+        sales_by_date[sale_date] += sale.total
+    
+    # Convert the aggregated data to a list of dictionaries
+    sales_data = [{'date': date.strftime('%Y-%m-%d'), 'total': total} for date, total in sales_by_date.items()]
+    
+    # Sort the data by date
+    sales_data.sort(key=lambda x: x['date'])
+    
+    # Return the sales data as JSON
+    return jsonify({"sales": sales_data})
 
 if __name__ == '__main__':
     with app.app_context():
