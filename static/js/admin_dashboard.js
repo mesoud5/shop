@@ -41,6 +41,56 @@ dropdownItems.forEach(dropdown => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to fetch sales data from the server
+    function fetchSalesData() {
+        fetch('/fetch_sales_data') // Update this URL with your actual endpoint for fetching sales data
+        .then(response => response.json())
+        .then(data => {
+            // Extract necessary data for chart creation
+            const dates = data.sales.map(sale => sale.date);
+            const salesAmounts = data.sales.map(sale => sale.total);
+            
+            // Call function to create line chart
+            createLineChart(dates, salesAmounts);
+        })
+        .catch(error => {
+            console.error('Error fetching sales data:', error);
+        });
+    }
+    
+    // Function to create line chart
+    function createLineChart(dates, salesAmounts) {
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Sales Amount',
+                    data: salesAmounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    
+    // Call function to fetch sales data and create line chart
+    fetchSalesData();
+});
+
+
 // Add event listener to close dropdowns when clicking outside
 document.addEventListener('click', (event) => {
     // Close dropdowns when clicking outside
