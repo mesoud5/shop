@@ -34,10 +34,16 @@
         <h2>Add Sale</h2>
         <form class="add-sale-form" action="{{ url_for('employee_add_sale') }}" method="POST">
             {{ form.csrf_token }}
+
             <div class="form-group">
                 <label for="item">Item:</label>
-                <input type="text" id="item" name="item" required>
+                <input type="text" id="item" name="item" class="form-control" autocomplete="off" required>
+                <div id="results-dropdown" class="dropdown-menu"></div>
             </div>
+            <!--<div class="form-group">
+                <label for="item">Item:</label>
+                <input type="text" id="item" name="item" required>
+            </div>-->
             <div class="form-group">
                 <label for="price">Price:</label>
                 <input type="number" id="price" name="price" required>

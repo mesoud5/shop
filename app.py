@@ -501,6 +501,21 @@ def employee_add_sale():
     return render_template('employee_dashboard.html', form=form)
 
 
+@app.route('/search_product', methods=['GET'])
+def search_product():
+    query = request.args.get('q', '')
+    print('Query:', query)  # Debugging print
+    if query:
+        products = Product.query.filter(Product.name.ilike(f'{query}%')).all()
+        print('Products found:', products)  # Debugging print
+        product_list = [{'id': p.id, 'name': p.name, 'price': p.selling_price, 'quantity': p.quantity} for p in products]
+        return jsonify(product_list)
+    return jsonify([])
+
+
+
+
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -530,6 +545,9 @@ def fetch_sales_data():
     
     # Return the sales data as JSON
     return jsonify({"sales": sales_data})
+
+
+
 
 if __name__ == '__main__':
     with app.app_context():

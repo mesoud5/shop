@@ -73,3 +73,94 @@ function calculateTotal() {
     var total = isNaN(price) || isNaN(quantity) ? 0 : price * quantity;
     document.getElementById('total').value = total.toFixed(2);
 }
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const itemInput = document.getElementById('item');
+    const resultsDropdown = document.getElementById('results-dropdown');
+
+    itemInput.addEventListener('input', function() {
+        const query = itemInput.value;
+        if (query.length > 1) {
+            fetch(`/search_product?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsDropdown.innerHTML = '';
+                    data.forEach(product => {
+                        const option = document.createElement('div');
+                        option.className = 'dropdown-item';
+                        option.textContent = product.name;
+                        option.dataset.id = product.id;
+                        option.dataset.price = product.price;
+                        option.dataset.quantity = product.quantity;
+                        option.addEventListener('click', function() {
+                            itemInput.value = product.name;
+                            document.getElementById('price').value = product.price;
+                            document.getElementById('quantity').value = product.quantity;
+                            resultsDropdown.innerHTML = '';
+                        });
+                        resultsDropdown.appendChild(option);
+                    });
+                });
+        } else {
+            resultsDropdown.innerHTML = '';
+        }
+    });
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const itemInput = document.getElementById('item');
+    const resultsDropdown = document.getElementById('results-dropdown');
+
+    itemInput.addEventListener('input', function() {
+        const query = itemInput.value;
+        if (query.length > 1) {
+            fetch(`/search_product?q=${query}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    resultsDropdown.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(product => {
+                            const option = document.createElement('div');
+                            option.className = 'dropdown-item';
+                            option.textContent = product.name;
+                            option.dataset.price = product.price;
+                            option.dataset.quantity = product.quantity;
+                            option.addEventListener('click', function() {
+                                itemInput.value = product.name;
+                                document.getElementById('price').value = product.price;
+                                document.getElementById('quantity').value = product.quantity;
+                                resultsDropdown.innerHTML = '';
+                            });
+                            resultsDropdown.appendChild(option);
+                        });
+                        resultsDropdown.classList.add('show');
+                    } else {
+                        resultsDropdown.classList.remove('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching product data:', error);
+                });
+        } else {
+            resultsDropdown.innerHTML = '';
+            resultsDropdown.classList.remove('show');
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!resultsDropdown.contains(e.target) && e.target !== itemInput) {
+            resultsDropdown.innerHTML = '';
+            resultsDropdown.classList.remove('show');
+        }
+    });
+});
