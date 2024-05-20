@@ -164,3 +164,144 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const itemInput = document.getElementById('item');
+    const resultsDropdown = document.getElementById('results-dropdown');
+    const addItemButton = document.getElementById('add-item-button');
+    const previewTableBody = document.getElementById('preview-table').querySelector('tbody');
+    const submitSaleButton = document.getElementById('submit-sale-button');
+
+    let saleItems = [];
+
+    itemInput.addEventListener('input', function () {
+        const query = itemInput.value;
+        if (query.length > 1) {
+            fetch(`/search_product?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsDropdown.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(product => {
+                            const option = document.createElement('div');
+                            option.className = 'dropdown-item';
+                            option.textContent = product.name;
+                            option.dataset.price = product.price;
+                            option.dataset.quantity = product.quantity;
+                            option.addEventListener('click', function () {
+                                itemInput.value = product.name;
+                                document.getElementById('price').value = product.price;
+                                document.getElementById('quantity').value = 1; // Default quantity to 1
+                                resultsDropdown.innerHTML = '';
+                            });
+                            resultsDropdown.appendChild(option);
+                        });
+                        resultsDropdown.classList.add('show');
+                    } else {
+                        resultsDropdown.classList.remove('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching product data:', error);
+                });
+        } else {
+            resultsDropdown.innerHTML = '';
+            resultsDropdown.classList.remove('show');
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!resultsDropdown.contains(e.target) && e.target !== itemInput) {
+            resultsDropdown.innerHTML = '';
+            resultsDropdown.classList.remove('show');
+        }
+    });
+
+    addItemButton.addEventListener('click', function () {
+        const item = itemInput.value;
+        const price = parseFloat(document.getElementById('price').value);
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const date = document.getElementById('date').value;
+
+        if (item && !isNaN(price) && !isNaN(quantity) && date) {
+            const total = price * quantity;
+
+            saleItems.push({ item, price, quantity, total, date });
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item}</td>
+                <td>${price.toFixed(2)}</td>
+                <td>${quantity}</td>
+                <td>${total.toFixed(2)}</td>
+                <td><button class="edit-button">Edit</button> <button class="delete-button">Delete</button></td>
+            `;
+
+            row.querySelector('.edit-button').addEventListener('click', function () {
+                // Populate the form with the selected item's details for editing
+                itemInput.value = item;
+                document.getElementById('price').value = price;
+                document.getElementById('quantity').value = quantity;
+                document.getElementById('date').value = date;
+
+                // Remove the item from saleItems and the preview table
+                saleItems = saleItems.filter(s => s.item !== item || s.date !== date);
+                row.remove();
+            });
+
+            row.querySelector('.delete-button').addEventListener('click', function () {
+                // Remove the item from saleItems and the preview table
+                saleItems = saleItems.filter(s => s.item !== item || s.date !== date);
+                row.remove();
+            });
+
+            previewTableBody.appendChild(row);
+
+            // Clear the form inputs
+            itemInput.value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('date').value = document.getElementById('date').defaultValue;
+        } else {
+            alert('Please fill out all fields.');
+        }
+    });
+
+    submitSaleButton.addEventListener('click', function () {
+        if (saleItems.length > 0) {
+            fetch('/employee_add_sale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                },
+                body: JSON.stringify(saleItems)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Sale added successfully!');
+                    location.reload();
+                } else {
+                    alert('Error adding sale: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        } else {
+            alert('No items to submit.');
+        }
+    });
+});

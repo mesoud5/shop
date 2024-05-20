@@ -448,57 +448,38 @@ def employee_dashboard():
     return render_template('employee_dashboard.html', current_date=current_date, form=form )
 
 
-@app.route('/employee_add_sale', methods=['GET', 'POST'])
+@app.route('/employee_add_sale', methods=['POST'])
 def employee_add_sale():
-    print("Employee add sale route accessed!")
-    form = SaleForm()
-    if form.validate_on_submit():
-        print("Form submitted successfully!")
-        print("Item:", form.item.data)
-        print("Price:", form.price.data)
-        print("Quantity:", form.quantity.data)
-        print("Date:", form.date.data)
+    data = request.json
+    if not data:
+        return jsonify({'success': False, 'error': 'No data provided'}), 400
 
-        # Ensure form validation passes
-        if form.validate():
-            print("Form validation passed!")
-        else:
-            print("Form validation failed:", form.errors)
+    try:
+        for item in data:
+            sale_date = datetime.strptime(item['date'], '%Y-%m-%d').date()
+            sale = Sale(
+                item=item['item'],
+                price=item['price'],
+                quantity=item['quantity'],
+                total=item['total'],
+                date=sale_date
+            )
 
-        # Print the entire form data received
-        print("Form data (request.form):", request.form)
+            product = Product.query.filter_by(name=item['item']).first()
+            if product:
+                sale.product_id = product.id
+                product.quantity -= item['quantity']
+                db.session.commit()
+            else:
+                return jsonify({'success': False, 'error': 'Product not found: ' + item['item']}), 400
 
-        # Convert the date string to a Python date object
-        sale_date_str = form.date.data.strftime('%Y-%m-%d')
-        sale_date = datetime.strptime(sale_date_str, '%Y-%m-%d').date()
+            db.session.add(sale)
 
-        # Create a new sale record
-        sale = Sale(
-            item=form.item.data,
-            price=form.price.data,
-            quantity=form.quantity.data,
-            total=form.price.data * form.quantity.data,
-            date=sale_date  # Assign the Python date object
-        )
-
-        # Find the product by name
-        product = Product.query.filter_by(name=form.item.data).first()
-        if product:
-            # If the product is found, update its quantity
-            sale.product_id = product.id  # Set the product_id of the sale
-            product.quantity -= form.quantity.data
-            db.session.commit()
-        else:
-            # If the product is not found, display an error message
-            flash('Product not found', 'error')
-            return redirect(url_for('employee_add_sale'))
-
-        # Commit the changes to the database
-        db.session.add(sale)  # Add the sale after setting the product_id
         db.session.commit()
-        flash('Sale added successfully!', 'success')
-        return redirect(url_for('employee_dashboard'))  # Redirect to the employee dashboard
-    return render_template('employee_dashboard.html', form=form)
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @app.route('/search_product', methods=['GET'])
