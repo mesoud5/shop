@@ -1,17 +1,16 @@
-/* styles.css */
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
+};
 
+/* Additional styles specific to this page */
 header {
     background-color: #333;
     color: #fff;
     padding: 10px 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content:space-between;
     align-items: center;
 }
 
@@ -154,45 +153,78 @@ article {
     width: 80%;
 }
 
-#addCategoryForm {
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 5px;
+.add-sale-form {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-#addCategoryForm h2 {
-    margin-top: 0;
+.form-group {
+    flex: 1;
+    margin-right: 10px;
     margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
 }
 
-#categoryForm label {
+.form-group:last-child {
+    margin-right: 0;
+}
+
+label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-#categoryForm input[type="text"] {
-    width: 50%; /* Adjust width to make input smaller */
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+    width: 100%;
     padding: 8px;
-    margin-bottom: 10px;
+    margin-top: 5px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
-#categoryForm button[type="submit"] {
-    background-color: #333;
-    color: #fff;
+#add-item-button {
     padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
-#categoryForm button[type="submit"]:hover {
-    background-color: #555;
+#add-item-button:hover {
+    background-color: #454545;
 }
 
+#preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
+#preview-table th,
+#preview-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
 
+#preview-table th {
+    background-color: #f4f4f4;
+}
+
+#submit-sale-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#submit-sale-button:hover {
+    background-color: #454545;
+}

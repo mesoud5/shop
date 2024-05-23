@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from datetime import datetime
 from datetime import date
 from wtforms import StringField, SubmitField
-from wtforms import StringField, IntegerField, DateField
+from wtforms import StringField, IntegerField, DateField, DecimalField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import QuerySelectField
 from sqlalchemy.orm import relationship
@@ -90,8 +90,12 @@ class SaleForm(FlaskForm):
     item = StringField('Item', validators=[DataRequired()])
     price = IntegerField('Price', validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired()])
+    total = DecimalField('Total', validators=[DataRequired()], render_kw={'readonly': True})
     date = DateField('Date', validators=[DataRequired()])
+    submit = SubmitField('Add Sale')
 
+
+    
 # Define hardcoded username and password combinations
 admin_username = "admin"
 admin_password = "mesoud@123"
@@ -228,39 +232,38 @@ def manage_products():
     products = Product.query.all()
     return render_template('manage_products.html', products=products)
 
-
-# Route for adding a new sale
 @app.route('/add_sale', methods=['GET', 'POST'])
 def add_sale():
     form = SaleForm()
-    if form.validate_on_submit():
-        # Create a new sale record
-        sale = Sale(
-            item=form.item.data,
-            price=form.price.data,
-            quantity=form.quantity.data,
-            total=form.price.data * form.quantity.data,
-            date=form.date.data
-        )
-        
-        # Find the product by name
-        product = Product.query.filter_by(name=form.item.data).first()
-        if product:
-            # If the product is found, update its quantity
-            sale.product_id = product.id  # Set the product_id of the sale
-            product.quantity -= form.quantity.data
+    if request.method == 'POST':
+        data = request.get_json()
+        items = data.get('items', [])
+        try:
+            for item in items:
+                product = Product.query.filter_by(name=item['item']).first()
+                if product:
+                    if product.quantity < item['quantity']:
+                        return jsonify({'success': False, 'message': f'Not enough quantity for {item["item"]}'})
+                    product.quantity -= item['quantity']
+                    sale = Sale(
+                        item=item['item'],
+                        price=item['price'],
+                        quantity=item['quantity'],
+                        total=item['total'],
+                        date=form.date.data,
+                        product_id=product.id
+                    )
+                    db.session.add(sale)
+                else:
+                    return jsonify({'success': False, 'message': f'Product {item["item"]} not found'})
             db.session.commit()
-        else:
-            # If the product is not found, display an error message
-            flash('Product not found', 'error')
-            return redirect(url_for('add_sale'))
-        
-        # Commit the changes to the database
-        db.session.add(sale)  # Add the sale after setting the product_id
-        db.session.commit()
-        flash('Sale added successfully!', 'success')
-        return redirect(url_for('add_sale'))
+            return jsonify({'success': True})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': str(e)})
     return render_template('add_sale.html', form=form)
+
+
 
 # Route for viewing all sales
 @app.route('/view_sales')
@@ -435,6 +438,17 @@ def daily_sales():
                            total_profit=total_profit,
                            current_date=current_date)
 
+@app.route('/admin_add_sale')
+def admin_add_sale():
+    # Instantiate SaleForm
+    form = SaleForm()
+
+    # Get the current date
+    current_date = datetime.today().strftime('%Y-%m-%d')
+    
+    # Render the employee dashboard with the current date in the context
+    return render_template('add_sale.html', current_date=current_date, form=form )
+
 
 @app.route('/employee_dashboard')
 def employee_dashboard():
@@ -492,6 +506,7 @@ def search_product():
         product_list = [{'id': p.id, 'name': p.name, 'price': p.selling_price, 'quantity': p.quantity} for p in products]
         return jsonify(product_list)
     return jsonify([])
+
 
 
 
