@@ -35,13 +35,14 @@
             <aside>
                 <nav class="section1">
                     <ul>
-                        <li><a href="/templates/admin_dashboard.html">dashboard</a></li>
+                        <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+
 
                         <li class="dropdown" id="categoriesDropdown">
                             <a href="#">Categories</a>
                             <div class="dropdown-content">
-                                <a href="/templates/manage_categories.html">Manage Categories</a>
-                                <a href="/templates/add_categories.html">Add Categories</a>
+                                <a href="{{ url_for('manage_categories') }}">Manage Categories</a>
+                                <a href="{{ url_for('add_category') }}">Add Categories</a>
                             </div>
                         </li>
                         <li class="dropdown">
