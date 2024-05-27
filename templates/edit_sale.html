@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>edit sale</title>
-    <link rel="stylesheet" href="../static/css/edit_sales.css"> <!-- Include your CSS file here -->
+    <title>Edit Sale</title>
+    <link rel="stylesheet" href="../static/css/edit_sales.css">
 </head>
 
 <body>
@@ -17,7 +17,7 @@
         </div>
         <div class="header-middle">
             <div class="date">
-                <p></p> <!-- JavaScript can be used to dynamically update the date -->
+                <p>Monday, May 27, 2024</p>
             </div>
         </div>
         <div class="header-right">
@@ -37,8 +37,6 @@
                 <nav class="section1">
                     <ul>
                         <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
-
-
                         <li class="dropdown" id="categoriesDropdown">
                             <a href="#">Categories</a>
                             <div class="dropdown-content">
@@ -65,43 +63,38 @@
                             <div class="dropdown-content">
                                 <a href="{{ url_for('sales_report') }}">Sales by Dates</a>
                                 <a href="{{ url_for('monthly_sales') }}">Monthly Sales</a>
-                                <a href="{{ url_for('daily_sales') }}">daily sales</a>
+                                <a href="{{ url_for('daily_sales') }}">Daily Sales</a>
                             </div>
                         </li>
                     </ul>
                 </nav>
             </aside>
-            <h2>edit Sale</h2>
-            <form method="POST" id="saleForm">
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    {{ form.item.label }}
-                    {{ form.item(class="form-control") }}
-                </div>
-                <div class="form-group">
-                    {{ form.price.label }}
-                    {{ form.price(class="form-control", id="price") }}
-                </div>
-                <div class="form-group">
-                    {{ form.quantity.label }}
-                    {{ form.quantity(class="form-control", id="quantity") }}
-                </div>
-
-                
-                <div class="form-group">
-                    {{ form.date.label }}
-                    {{ form.date(class="form-control") }}
-                </div>
-                <button type="submit" class="btn btn-primary">update Sale</button>
-            </form>
-            
-            
-        </article>
+            <article>
+                <h2>Edit Sale</h2>
+                <form method="POST" id="saleForm">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.item.label }}
+                        {{ form.item(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.price.label }}
+                        {{ form.price(class="form-control", id="price") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.quantity.label }}
+                        {{ form.quantity(class="form-control", id="quantity") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.date.label }}
+                        {{ form.date(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Sale</button>
+                </form>
+            </article>
         </div>
     </main>
-    <!-- The rest of your page content will go here -->
     <script src="../static/js/admin_dashboard.js"></script>
-
 </body>
 
 </html>

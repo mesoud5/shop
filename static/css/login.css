@@ -14,6 +14,18 @@ body {
     background-color: #fff;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     text-align: center;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 h1 {
@@ -23,6 +35,16 @@ h1 {
 
 .form-group {
     margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 input[type="text"],
@@ -33,11 +55,23 @@ input[type="password"] {
     border-bottom: 2px solid #ddd;
     outline: none;
     transition: border-color 0.3s;
+    animation: slideInInput 0.5s ease-out;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus {
     border-color: #007bff;
+}
+
+@keyframes slideInInput {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 button {
@@ -50,14 +84,34 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    animation: fadeInButton 0.5s ease-out;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
+@keyframes fadeInButton {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 #error-message {
     color: #ff3333;
     margin-bottom: 20px;
     font-size: 14px;
+    animation: fadeInError 0.5s ease-out;
+}
+
+@keyframes fadeInError {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
